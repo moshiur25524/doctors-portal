@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import auth from '../../firebase.init';
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useSendPasswordResetEmail, useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useForm } from "react-hook-form";
 import Loading from '../Shared/Loading';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { async } from '@firebase/util';
 
 const Login = () => {
 
@@ -25,12 +26,22 @@ const Login = () => {
         error,
     ] = useSignInWithEmailAndPassword(auth);
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+    const [sendPasswordResetEmail, sending, ReError] = useSendPasswordResetEmail(
+        auth
+      );
 
-    if (user || gUser) {
-        navigate(from, { replace: true });
-    }
+    useEffect(()=>{
+        if (user || gUser) {
+            navigate(from, { replace: true });
+        }
+    },[user, gUser, from, navigate])
+
     const handleGoogleSignin = () => {
         signInWithGoogle()
+    }
+    const handleResetPassword = async(event) =>{
+        const email = event.target.email.value
+        await sendPasswordResetEmail(email)
     }
 
     let signInError;
@@ -94,6 +105,7 @@ const Login = () => {
                                     }
                                 })}
                             />
+                            <p>Forget passwod ? <span className='text-primary' onClick={handleResetPassword}>Reset password</span></p>
                             <label className="label">
                                 {errors.password?.type === 'required' && <span className="label-text-alt text-red-500">{errors.password.message}</span>}
                                 {errors.password?.type === 'minLength' && <span className="label-text-alt text-red-500">{errors.password.message}</span>}

@@ -69,7 +69,7 @@ const Services = () => {
                 }}>
                     <div className="hero-content flex-col lg:flex-row mt-20">
                         <div className=''>
-                            <img className='mt-[-300px] hidden lg:block' src={doctorSmall} className="max-w-lg rounded-lg shadow-2xl" alt='treatment' />
+                            <img className='mt-[-300px] hidden lg:block max-w-lg rounded-lg shadow-2xl' src={doctorSmall} alt='treatment' />
                         </div>
                         <div>
                             <p className='text-secondary font-bold text-white'>Appointment</p>

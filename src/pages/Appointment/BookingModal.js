@@ -1,20 +1,56 @@
 import { format } from 'date-fns';
+import id from 'date-fns/esm/locale/id/index.js';
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { toast } from 'react-toastify';
 import auth from '../../firebase.init';
 
 const BookingModal = ({ setTreatment , treatment, date }) => {
     const {_id, name, slots } = treatment;
     const [user, loading, error] = useAuthState(auth);
 
+    
+
     const handleBooking = event =>{
         event.preventDefault();
         const slot = event.target.slot.value;
-        const name= event.target.name.value;
+        // const name= event.target.name.value;
         const number = event.target.number.value;
         const email = event.target.email.value;
-        console.log(_id, slot,name, number, email);
-        setTreatment(null)
+        console.log(_id, slot,number, email);
+
+        const formatedDate = format(date, 'pp')
+        
+        const booking = {
+            treatmentId: _id,
+            treatment: name,
+            date: formatedDate,
+            slot,
+            patient: user.email,
+            patientName: user.displayName,
+            phone: event.target.number.value
+        }
+
+        fetch('http://localhost:5000/booking', {
+           method: 'POST',
+           headers: {
+               'content-type': 'application/json'
+           },
+           body: JSON.stringify(booking)
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            if(data.success){
+                toast(`Appointment is set, ${formatedDate} at ${slot}`) 
+            }
+            else{
+                toast.error (`You Already have an Appointment on , ${data.booking?.date} at ${data.booking?.slot}`) 
+            }
+            setTreatment(null)
+        })
+        // to close the modal
+        
     }
     return (
         <div>
@@ -27,7 +63,10 @@ const BookingModal = ({ setTreatment , treatment, date }) => {
                         <input type="text" value={format(date, 'PP')} className="input input-bordered w-full max-w-xs" disabled />
                         <select name='slot' className="select select-bordered w-full max-w-xs">
                             {
-                                slots.map(slot => <option value={slot}>{slot}</option>)
+                                slots.map((slot, index) => <option 
+                                    key={index}
+                                    value={slot}
+                                    >{slot}</option>)
                             }
                         </select>
                         <input type="text" disabled value={user?.displayName} name='name' className="input input-bordered w-full max-w-xs" />
