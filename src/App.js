@@ -9,26 +9,37 @@ import ContactUs from './pages/ContactUs/ContactUs';
 import Login from './pages/Login/Login';
 import SignUp from './pages/Login/SignUp';
 import RequireAuth from './pages/Login/RequireAuth';
-import { ToastContainer} from 'react-toastify';
-
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Dashboard from './pages/Dashboard/Dashboard';
+import MyAppointments from './pages/Dashboard/MyAppointments';
+import MyReview from './pages/Dashboard/MyReview';
+import MyHistory from './pages/Dashboard/MyHistory';
 
 function App() {
   return (
     <div className='max-w-7xl mx-auto'>
       <Navbar></Navbar>
       <Routes>
-          <Route path='/' element={<Home></Home>}></Route>
-          <Route path='/about' element={<About></About>}></Route>
-          <Route path='/appointment' element={
-            <RequireAuth>
-              <Appointment></Appointment>
-            </RequireAuth>
-          }></Route>
-          <Route path='/reviews' element={<Reviews></Reviews>}></Route>
-          <Route path='/contact' element={<ContactUs></ContactUs>}></Route>
-          <Route path='/login' element={<Login></Login>}></Route>
-          <Route path='/signup' element={<SignUp></SignUp>}></Route>
+        <Route path='/' element={<Home></Home>}></Route>
+        <Route path='/about' element={<About></About>}></Route>
+        <Route path='/appointment' element={
+          <RequireAuth>
+            <Appointment></Appointment>
+          </RequireAuth>}>
+        </Route>
+        <Route path='/dashboard' element={
+          <RequireAuth>
+            <Dashboard></Dashboard>
+          </RequireAuth>}>
+            <Route index element={<MyAppointments></MyAppointments>}></Route>
+            <Route path='review' element={<MyReview></MyReview>}></Route>
+            <Route path='history' element={<MyHistory></MyHistory>}></Route>
+        </Route>
+        <Route path='/reviews' element={<Reviews></Reviews>}></Route>
+        <Route path='/contact' element={<ContactUs></ContactUs>}></Route>
+        <Route path='/login' element={<Login></Login>}></Route>
+        <Route path='/signup' element={<SignUp></SignUp>}></Route>
       </Routes>
       <ToastContainer />
     </div>

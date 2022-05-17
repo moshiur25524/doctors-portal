@@ -1,9 +1,9 @@
-import { async } from '@firebase/util';
 import React from 'react';
 import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
+import useToken from '../../Hooks/useToken';
 import Loading from '../Shared/Loading';
 
 const SignUp = () => {
@@ -25,10 +25,11 @@ const SignUp = () => {
 
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
     const [updateProfile, updating, upError] = useUpdateProfile(auth);
+    const [token] = useToken(user || gUser)
 
     const navigate = useNavigate()
 
-    if (user || gUser) {
+    if (token) {
         navigate('/appointment')
     }
     const handleGoogleSignin = () => {
