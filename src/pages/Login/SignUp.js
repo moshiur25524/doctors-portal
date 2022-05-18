@@ -32,9 +32,7 @@ const SignUp = () => {
     if (token) {
         navigate('/appointment')
     }
-    const handleGoogleSignin = () => {
-        signInWithGoogle()
-    }
+
 
     let signInError;
     if (loading || gLoading || updating) {
@@ -132,7 +130,7 @@ const SignUp = () => {
                         <p>Alredy Have an Account ? <Link className='text-secondary' to='/login'>Log in Please !</Link></p>
                     </form>
                     <div className="divider">OR</div>
-                    <button className="btn btn-outline btn-info" onClick={handleGoogleSignin}>Continue With Google</button>
+                    <button className="btn btn-outline btn-info" onClick={() => signInWithGoogle()}>Continue With Google</button>
                 </div>
             </div>
         </div>

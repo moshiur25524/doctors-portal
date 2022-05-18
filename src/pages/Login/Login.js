@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import Loading from '../Shared/Loading';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { async } from '@firebase/util';
+import useToken from '../../Hooks/useToken';
 
 const Login = () => {
 
@@ -13,12 +14,13 @@ const Login = () => {
     const from = location.state?.from?.pathname || "/";
 
     const { register, formState: { errors }, handleSubmit } = useForm();
+    
+
+
     const onSubmit = data => {
         console.log(data)
         signInWithEmailAndPassword(data.email, data.password)
-       
     };
-
     const [
         signInWithEmailAndPassword,
         user,
@@ -26,20 +28,20 @@ const Login = () => {
         error,
     ] = useSignInWithEmailAndPassword(auth);
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+
+    const [token] = useToken(user || gUser)
+    
     const [sendPasswordResetEmail, sending, ReError] = useSendPasswordResetEmail(
         auth
-      );
+    );
 
-    useEffect(()=>{
-        if (user || gUser) {
+    useEffect(() => {
+        if (token) {
             navigate(from, { replace: true });
         }
-    },[user, gUser, from, navigate])
+    }, [token, from, navigate])
 
-    const handleGoogleSignin = () => {
-        signInWithGoogle()
-    }
-    const handleResetPassword = async(event) =>{
+    const handleResetPassword = async (event) => {
         const email = event.target.email.value
         await sendPasswordResetEmail(email)
     }
@@ -50,6 +52,10 @@ const Login = () => {
     }
     if (error) {
         signInError = <p className='text-red-500'><small>{error?.message || gError?.message}</small></p>
+    }
+
+    if (user || gUser) {
+        navigate(from, { replace: true })
     }
 
     return (
@@ -116,7 +122,7 @@ const Login = () => {
                         <p>New to Doctors Portal ? <Link className='text-secondary' to='/signup'>Create new Account</Link></p>
                     </form>
                     <div className="divider">OR</div>
-                    <button className="btn btn-outline btn-info" onClick={handleGoogleSignin}>Continue With Google</button>
+                    <button className="btn btn-outline btn-info" onClick={() => signInWithGoogle()}>Continue With Google</button>
                 </div>
             </div>
         </div>
