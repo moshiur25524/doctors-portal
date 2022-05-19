@@ -6,7 +6,7 @@ const Footer = () => {
 
     const currentDate = new Date();
 const year = currentDate.getFullYear();
-console.log(year)
+// console.log(year)
     return (
         <div>
             <footer className="footer p-10 " style={{

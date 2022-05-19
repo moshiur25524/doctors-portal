@@ -3,8 +3,8 @@
     "public": "build",
     "ignore": [
       "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+      "/.",
+      "/node_modules/*"
     ],
     "rewrites": [
       {
@@ -12,5 +12,8 @@
         "destination": "/index.html"
       }
     ]
+  },
+  "database": {
+    "rules": "database.rules.json"
   }
 }

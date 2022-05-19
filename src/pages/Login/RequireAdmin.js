@@ -7,7 +7,7 @@ import useAdmin from '../../Hooks/useAdmin';
 import Loading from '../Shared/Loading';
 
 const RequireAdmin = ({children}) => {
-    const [user, loading, error] = useAuthState(auth);
+    const [user, loading] = useAuthState(auth);
     const [admin, adminLoading] = useAdmin(user)
     const location = useLocation()
 

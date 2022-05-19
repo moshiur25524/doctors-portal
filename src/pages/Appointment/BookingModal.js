@@ -31,7 +31,7 @@ const BookingModal = ({ setTreatment , treatment, date, refetch }) => {
             phone: event.target.number.value
         }
 
-        fetch('http://localhost:5000/booking', {
+        fetch('https://warm-inlet-22795.herokuapp.com/booking', {
            method: 'POST',
            headers: {
                'content-type': 'application/json'
