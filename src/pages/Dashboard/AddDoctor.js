@@ -8,7 +8,7 @@ import Loading from '../Shared/Loading';
 const AddDoctor = () => {
     const { register, formState: { errors }, handleSubmit , reset } = useForm();
 
-    const { data: services, isLoading } = useQuery('services', () => fetch('http://localhost:5000/service').then(res => res.json()))
+    const { data:services, isLoading } = useQuery('services', () => fetch('http://localhost:5000/service').then(res => res.json()))
 
     const imageStorageKey = 'f46ea5cf818ea8d483faadfebfa21a5d';
 
@@ -55,10 +55,13 @@ const AddDoctor = () => {
                 console.log('imgbb', result);
             })
 
-            if (isLoading) {
-                return <Loading></Loading>
-            }
+            // if (isLoading) {
+            //     return <Loading></Loading>
+            // }
     };
+    if (isLoading) {
+        return <Loading></Loading>
+    }
 
     return (
         <div>
@@ -104,7 +107,7 @@ const AddDoctor = () => {
                             },
                             pattern: {
                                 value: /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/,
-                                message: 'Invalid Email Field' // JS only: <p>error message</p> TS only support string
+                                message: 'Invalid Email Field' 
                             }
                         })}
                     />
@@ -120,7 +123,7 @@ const AddDoctor = () => {
                     </label>
                     <select {...register('specialty')} class="select input-bordered w-full max-w-xs">
                         {
-                            services.map(service => <option
+                            services?.map(service => <option
                                 keys={service._id}
                                 value={service.name}
                             >{service.name}</option>)
@@ -135,7 +138,7 @@ const AddDoctor = () => {
                     </label>
                     <input
                         type="file"
-                        name='name'
+                        name='photo'
                         className="input input-bordered w-full max-w-xs"
                         {...register("image", {
                             required: {
@@ -152,7 +155,7 @@ const AddDoctor = () => {
                 </div>
 
                 <input className='btn w-full max-w-xs' type="submit" value='Add' />
-                <p>Alredy Have an Account ? <Link className='text-secondary' to='/login'>Log in Please !</Link></p>
+               
             </form>
         </div>
     );
